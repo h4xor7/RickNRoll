@@ -122,5 +122,10 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.loggingInterceptor)
 
+    //palette
+    implementation(libs.androidx.palette.ktx)
+    //glide
+    implementation(libs.glide.compose)
+
 
 }
