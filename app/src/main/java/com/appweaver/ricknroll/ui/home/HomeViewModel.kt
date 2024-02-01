@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.palette.graphics.Palette
-import com.appweaver.ricknroll.model.CharacterResponse
+import com.appweaver.ricknroll.model.Result
 import com.appweaver.ricknroll.repository.HomeRepository
 import com.appweaver.ricknroll.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository
 ) : ViewModel() {
 
-    var characterList = mutableStateOf<List<CharacterResponse>>(listOf())
+    var characterList = mutableStateOf<List<Result>>(listOf())
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
     var endReached = mutableStateOf(false)
@@ -37,7 +37,7 @@ class HomeViewModel @Inject constructor(
             when (result) {
                 is Resource.Success -> {
                     isLoading.value = false
-                    characterList.value += result.data!!
+                    characterList.value += result.data!!.results
                     loadError.value = ""
                 }
 
