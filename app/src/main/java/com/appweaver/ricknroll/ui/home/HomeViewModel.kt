@@ -19,7 +19,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository
 ) : ViewModel() {
-
+    private var curPage = 1
     var characterList = mutableStateOf<List<Result>>(listOf())
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
@@ -33,7 +33,8 @@ class HomeViewModel @Inject constructor(
     fun loadCharacters() {
         viewModelScope.launch {
             isLoading.value = true
-            val result = homeRepository.getCharacters()
+            val result = homeRepository.getCharacters( curPage)
+            curPage++
             when (result) {
                 is Resource.Success -> {
                     isLoading.value = false

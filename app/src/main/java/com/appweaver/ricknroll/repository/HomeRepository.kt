@@ -9,9 +9,9 @@ import javax.inject.Singleton
 @Singleton
 class HomeRepository @Inject constructor(private val api: RickNRollApi) {
 
-    suspend fun getCharacters(): Resource<CharacterResponse> {
+    suspend fun getCharacters(page: Int): Resource<CharacterResponse> {
         val response = try {
-            api.getCharacters()
+            api.getCharacters(page)
         } catch (e: Exception) {
             return Resource.Error("An unknown error occured.")
         }

@@ -52,6 +52,7 @@ fun CharacterListScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val characterList by remember { viewModel.characterList }
+    val endReached by remember { viewModel.endReached }
     val loadError by remember { viewModel.loadError }
     val isLoading by remember { viewModel.isLoading }
 
@@ -64,6 +65,10 @@ fun CharacterListScreen(
     ) {
 
         items(characterList.size) {
+
+            if (it >= characterList.size - 1 && !endReached && !isLoading) {
+                viewModel.loadCharacters()
+            }
             Character(item = characterList[it])
         }
     }
