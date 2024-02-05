@@ -15,8 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +31,7 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,37 +62,50 @@ fun CharacterListScreen(
     val loadError by remember { viewModel.loadError }
     val isLoading by remember { viewModel.isLoading }
 
-    Log.d(TAG, "CharacterList: $characterList")
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier.padding(8.dp)
-    ) {
+    Scaffold(
+        topBar = {
+            TopAppBar()
+        }
 
-        items(characterList.size) {
+    ) {it->
 
-            if (it >= characterList.size - 1 && !endReached && !isLoading) {
-                viewModel.loadCharacters()
+        Log.d(TAG, "CharacterList: $characterList")
+        LazyVerticalGrid(
+            contentPadding = it,
+            columns = GridCells.Fixed(2),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = modifier.padding(8.dp)
+        ) {
+
+            items(characterList.size) {
+
+                if (it >= characterList.size - 1 && !endReached && !isLoading) {
+                    viewModel.loadCharacters()
+                }
+                Character(item = characterList[it])
             }
-            Character(item = characterList[it])
         }
+
+
+        Box(
+            contentAlignment = Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(color = colorScheme.primary)
+            }
+            if (loadError.isNotEmpty()) {
+                /* RetrySection(error = loadError) {
+                     viewModel.loadPokemonPaginated()
+                 }*/
+            }
+        }
+
+
     }
 
 
-    Box(
-        contentAlignment = Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        if (isLoading) {
-            CircularProgressIndicator(color = colorScheme.primary)
-        }
-        if (loadError.isNotEmpty()) {
-           /* RetrySection(error = loadError) {
-                viewModel.loadPokemonPaginated()
-            }*/
-        }
-    }
 
 
 }
@@ -182,6 +200,20 @@ fun Character(
 
     }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBar(modifier: Modifier = Modifier) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = stringResource(R.string.app_name),
+                style = MaterialTheme.typography.displayLarge,
+            )
+        },
+        modifier = modifier
+    )
+}
 
 
 @Preview(showBackground = true)
