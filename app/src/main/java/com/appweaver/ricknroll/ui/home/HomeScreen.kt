@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -208,7 +209,8 @@ fun TopAppBar(modifier: Modifier = Modifier) {
         title = {
             Text(
                 text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.displayLarge,
+                fontFamily =FontFamily.SansSerif,
+                style = MaterialTheme.typography.titleLarge,
             )
         },
         modifier = modifier
