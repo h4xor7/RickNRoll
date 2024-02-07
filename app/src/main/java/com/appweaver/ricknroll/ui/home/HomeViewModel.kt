@@ -65,6 +65,19 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+
+    fun calcOnDominantColor(drawable: Drawable, onFinish: (Color) -> Unit) {
+        val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
+
+        Palette.from(bmp).generate { palette ->
+            palette?.lightVibrantSwatch ?.rgb?.let { colorValue ->
+                onFinish(Color(colorValue))
+            }
+        }
+    }
+
+
 }
 
 
