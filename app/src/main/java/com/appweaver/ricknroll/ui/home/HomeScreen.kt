@@ -2,11 +2,13 @@ package com.appweaver.ricknroll.ui.home
 
 import android.graphics.drawable.Drawable
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,10 +29,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -120,6 +125,11 @@ fun Character(
 ){
 
     val defaultDominantColor = colorScheme.surface
+    val defaultOnDominantColor = colorScheme.onSurface
+
+    var onDominantColor by remember {
+        mutableStateOf(defaultOnDominantColor)
+    }
     var dominantColor by remember {
         mutableStateOf(defaultDominantColor)
     }
@@ -170,6 +180,9 @@ fun Character(
                                 viewModel.calcDominantColor(resource) { color ->
                                     dominantColor = color
                                 }
+                                viewModel.calcOnDominantColor(resource) { color ->
+                                    onDominantColor = color
+                                }
                             }
                             return false
                         }
@@ -182,15 +195,15 @@ fun Character(
 
             Text(
                 text = item.name,
-                fontSize = 20.sp,
-                color =  colorScheme.onSurfaceVariant,
+                color =  onDominantColor,
                 textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 1,
                 softWrap = true,
-                overflow = TextOverflow.Ellipsis
-            )
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.labelSmall,
+
+                )
 
         }
 
@@ -205,13 +218,24 @@ fun Character(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(modifier: Modifier = Modifier) {
+
     CenterAlignedTopAppBar(
         title = {
-            Text(
-                text = stringResource(R.string.app_name),
-                fontFamily =FontFamily.SansSerif,
-                style = MaterialTheme.typography.titleLarge,
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) { Image(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .padding(8.dp),
+                    painter = painterResource(R.drawable.rick_svg),
+
+                    contentDescription = null
+                )
+                Text(
+                    text = stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.displayLarge
+                )
+            }
         },
         modifier = modifier
     )
