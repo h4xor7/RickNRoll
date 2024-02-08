@@ -71,11 +71,37 @@ class HomeViewModel @Inject constructor(
         val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
         Palette.from(bmp).generate { palette ->
-            palette?.lightVibrantSwatch ?.rgb?.let { colorValue ->
+            val lightVibrantColor = palette?.lightVibrantSwatch?.rgb
+            val dominantColor = palette?.dominantSwatch?.rgb
+            val darkVibrantColor = palette?.darkVibrantSwatch?.rgb
+            val lightMutedColor = palette?.lightMutedSwatch?.rgb
+            val mutedColor = palette?.mutedSwatch?.rgb
+            val darkMutedColor = palette?.darkMutedSwatch?.rgb
+            val vibrantColor = palette?.vibrantSwatch?.rgb
+
+           palette?.vibrantSwatch ?.rgb?.let { colorValue ->
                 onFinish(Color(colorValue))
             }
         }
     }
+
+    fun isContrastRatioAcceptable(textColor: Color, backgroundColor: Color): Boolean {
+        val foregroundLuminance = calculateLuminance(textColor)
+        val backgroundLuminance = calculateLuminance(backgroundColor)
+
+        val contrastRatio = if (foregroundLuminance > backgroundLuminance) {
+            (foregroundLuminance + 0.05) / (backgroundLuminance + 0.05)
+        } else {
+            (backgroundLuminance + 0.05) / (foregroundLuminance + 0.05)
+        }
+
+        return contrastRatio >= 4.5 // Adjust threshold as needed
+    }
+
+    fun calculateLuminance(color: Color): Double {
+        return 0.2126 * color.red + 0.7152 * color.green + 0.0722 * color.blue
+    }
+
 
 
 }
