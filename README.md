@@ -1,4 +1,4 @@
-# RickNRoll(Under Construction)
+# RickNRoll (Under Construction)
 
 RickNRoll is an Android app that allows users to browse a list of Rick and Morty characters.
 
