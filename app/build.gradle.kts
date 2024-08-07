@@ -127,5 +127,7 @@ dependencies {
     //glide
     implementation(libs.glide.compose)
 
+    implementation(libs.androidx.glance)
+    implementation (libs.androidx.glance.appwidget)
 
 }
